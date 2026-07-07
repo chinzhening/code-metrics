@@ -10,8 +10,13 @@ import (
 )
 
 func main() {
-	if err := godotenv.Load(".env"); err != nil {
-		log.Fatal(err)
+	// check if .env file exists and load it
+	if _, err := os.Stat(".env"); errors.Is(err, os.ErrNotExist) {
+		log.Println(".env file does not exist, skipping loading environment variables")
+	} else {
+		if err := godotenv.Load(".env"); err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	port := os.Getenv("PORT")
